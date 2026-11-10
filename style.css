@@ -98,3 +98,20 @@ legend{font-size:16px}fieldset label,label{font-size:15px}input:not([type=radio]
 
 /* Aumento visual equivalente al zoom de escritorio, sin cambiar el zoom del navegador. */
 @media (min-width: 1200px) { body { zoom: 1.2; } }
+
+/* Cards de la ruta: alineadas y con crecimiento superpuesto */
+.steps{align-items:stretch;grid-auto-rows:minmax(270px,auto)}
+.steps article:has(.ruta-etapa){min-height:270px;padding:0;align-self:stretch;z-index:0}
+.steps .ruta-etapa{height:100%;min-height:0;transition:transform .22s ease,box-shadow .22s ease}
+.steps article:has(.ruta-etapa):hover,.steps article:has(.ruta-etapa):focus-within{z-index:2}
+.steps .ruta-etapa:focus-visible{transform:scale(1.045)!important;box-shadow:none}
+.steps .ruta-etapa[aria-expanded="true"]{box-shadow:none}
+@media(max-width:800px){.steps{grid-auto-rows:minmax(280px,auto)}.steps article:has(.ruta-etapa){min-height:280px}}
+@media(max-width:520px){.steps{grid-auto-rows:minmax(330px,auto)}.steps article:has(.ruta-etapa){min-height:330px}}
+@media(hover:hover) and (pointer:fine){.steps .ruta-etapa:hover{transform:scale(1.045)!important;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){.steps .ruta-etapa{transition:none}.steps .ruta-etapa:hover,.steps .ruta-etapa:focus-visible{transform:none!important}}
+
+/* Recurso de video integrado en el paso de la guía. */
+.microleccion{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:22px;padding:22px 24px;background:#fffef9;border:1px solid var(--line)}
+.microleccion h3{font:400 24px Cambria,Georgia,serif;margin:5px 0}.microleccion p{margin:0;color:var(--muted);font-size:14px}.microleccion .btn{flex-shrink:0;text-align:center}
+@media(max-width:700px){.microleccion{align-items:stretch;flex-direction:column;gap:16px}.microleccion .btn{width:100%}}
