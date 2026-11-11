@@ -10,3 +10,9 @@ html.access-contrast .guia-paso.actual,html.access-contrast .guia-paso.actual :i
 @media(max-width:520px){.top{gap:6px}.access-widget{right:auto;bottom:auto}.access-toggle{width:44px;height:44px}.access-panel{width:min(330px,calc(100vw - 20px))}}
 @media(max-width:520px){.access-panel{position:fixed;top:80px;right:10px;bottom:auto;max-height:calc(100dvh - 90px)}}
 @media(max-width:360px){.brand svg{width:34px;height:34px}.brand b{font-size:14px}.brand small{font-size:8px}.menu-principal summary{padding:8px}}
+/* Los controles de accesibilidad también acompañan el aumento de texto. */
+.access-panel{font-size:calc(16px * var(--access-ui-scale, 1))}
+.access-panel p,.access-panel button,.access-panel .access-hint{font-size:calc(14px * var(--access-ui-scale, 1))}
+.access-panel strong{font-size:calc(15px * var(--access-ui-scale, 1))}
+.access-panel .access-heading h2{font-size:calc(20px * var(--access-ui-scale, 1))}
+.access-panel .access-close{font-size:calc(25px * var(--access-ui-scale, 1))}

@@ -16,6 +16,7 @@
       candidates.forEach((el,i)=>{if(!Number.isFinite(sizes[i])||sizes[i]<=0)return;originals.set(el,{value:el.style.getPropertyValue('font-size'),priority:el.style.getPropertyPriority('font-size')});el.style.setProperty('font-size',`${sizes[i]*levels[prefs.level]}px`,'important')});
     }
     root.classList.toggle('access-text-adjusted',prefs.level!==1);
+    root.style.setProperty('--access-ui-scale',String(levels[prefs.level]));
     sizeText.textContent=`Tamaño: ${Math.round(levels[prefs.level]*100)} %`;
     id('access-smaller').disabled=prefs.level===0;id('access-larger').disabled=prefs.level===levels.length-1;
   }
@@ -36,9 +37,30 @@
     const selection=window.getSelection();if(selection&&!selection.isCollapsed&&selection.anchorNode&&!widget.contains(selection.anchorNode)){const text=selection.toString().trim();if(text){selected=text;selectionSource=selection.anchorNode.parentElement}}
   });
   const speechAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
-  if(!speechAvailable){id('access-read').disabled=true;id('access-stop').disabled=true;message.textContent='La lectura en voz alta no está disponible en este navegador.'}
-  id('access-read').addEventListener('click',()=>{if(!selected||!selectionSource||!selectionSource.isConnected){message.textContent='Primero selecciona el texto que deseas escuchar.';return}window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(selected);utterance.lang='es';utterance.onend=()=>{message.textContent='Lectura finalizada.'};utterance.onerror=()=>{message.textContent='No se pudo reproducir la lectura en este navegador.'};window.speechSynthesis.speak(utterance);message.textContent='Leyendo el texto seleccionado.'});
-  id('access-stop').addEventListener('click',()=>{window.speechSynthesis.cancel();message.textContent='Lectura detenida.'});
+  let speechSession=0;
+  function stopSpeech(){speechSession++;window.speechSynthesis.cancel()}
+  function speakText(text){
+    const parts=text.match(/[^.!?\n]{1,220}(?:[.!?]|\n|$)|[^.!?\n]{1,220}/g)||[];
+    if(!parts.length){message.textContent='No hay texto disponible para leer.';return}
+    stopSpeech();const session=speechSession;let index=0;
+    function next(){
+      if(session!==speechSession)return;
+      if(index>=parts.length){message.textContent='Lectura finalizada.';return}
+      const utterance=new SpeechSynthesisUtterance(parts[index++]);utterance.lang='es';
+      utterance.onend=next;
+      utterance.onerror=()=>{if(session===speechSession)message.textContent='No se pudo reproducir la lectura en este navegador.'};
+      window.speechSynthesis.speak(utterance);
+    }
+    message.textContent='Leyendo en voz alta. Pulsa Detener lectura para terminar.';next();
+  }
+  if(!speechAvailable){id('access-read').disabled=true;id('access-read-main').disabled=true;id('access-stop').disabled=true;message.textContent='La lectura en voz alta no está disponible en este navegador.'}
+  id('access-read').addEventListener('click',()=>{if(!selected||!selectionSource||!selectionSource.isConnected){message.textContent='Primero selecciona el texto que deseas escuchar.';return}speakText(selected)});
+  id('access-read-main').addEventListener('click',()=>{const main=document.querySelector('main');speakText(main?main.innerText.trim():'')});
+  id('access-stop').addEventListener('click',()=>{stopSpeech();message.textContent='Lectura detenida.'});
+  const sound=id('soundToggle'), soundAccess=id('access-sound');
+  function updateSoundAccess(){const muted=sound.getAttribute('aria-pressed')==='false';soundAccess.setAttribute('aria-pressed',String(muted));soundAccess.textContent=muted?'Activar sonidos de respuesta':'Silenciar sonidos de respuesta'}
+  soundAccess.addEventListener('click',()=>sound.click());
+  new MutationObserver(updateSoundAccess).observe(sound,{attributes:true,attributeFilter:['aria-pressed']});updateSoundAccess();
   new MutationObserver(records=>{if(prefs.level!==1&&records.some(r=>!widget.contains(r.target))){clearTimeout(timer);timer=setTimeout(resizeText,80)}}).observe(document.body,{childList:true,subtree:true});
   window.addEventListener('resize',()=>{if(prefs.level!==1){clearTimeout(timer);timer=setTimeout(resizeText,120)}});
   render();
