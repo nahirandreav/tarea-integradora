@@ -16,3 +16,9 @@ html.access-contrast .guia-paso.actual,html.access-contrast .guia-paso.actual :i
 .access-panel strong{font-size:calc(15px * var(--access-ui-scale, 1))}
 .access-panel .access-heading h2{font-size:calc(20px * var(--access-ui-scale, 1))}
 .access-panel .access-close{font-size:calc(25px * var(--access-ui-scale, 1))}
+/* Mantener el desplazamiento dentro de las opciones mientras están abiertas. */
+.access-panel{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+@media(min-width:1200px){.access-panel{max-height:calc(100dvh / 1.2 - 100px)}}
+/* El encabezado del panel permanece visible mientras se recorren sus opciones. */
+.access-heading{position:sticky;top:-18px;z-index:1;margin:-2px 0 0;padding:2px 0 8px;background:#fffef8}
+html.access-contrast .access-heading{background:#fff;color:#000}

@@ -115,3 +115,47 @@ legend{font-size:16px}fieldset label,label{font-size:15px}input:not([type=radio]
 .microleccion{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:22px;padding:22px 24px;background:#fffef9;border:1px solid var(--line)}
 .microleccion h3{font:400 24px Cambria,Georgia,serif;margin:5px 0}.microleccion p{margin:0;color:var(--muted);font-size:14px}.microleccion .btn{flex-shrink:0;text-align:center}
 @media(max-width:700px){.microleccion{align-items:stretch;flex-direction:column;gap:16px}.microleccion .btn{width:100%}}
+/* Ajustes para pantallas táctiles y orientación horizontal. */
+@media(max-width:700px){
+ .shell,.top{width:calc(100% - 32px)}
+ .top{gap:6px}
+ .brand{min-width:0;gap:6px}
+ .brand span:last-child{min-width:0}
+ .brand b{font-size:14px;line-height:1.15}
+ .brand small{font-size:9px;line-height:1.1}
+ .sound-toggle{font-size:0;min-width:44px;min-height:44px;padding:7px;flex:none}
+ .sound-toggle::first-letter{font-size:18px}
+ .menu-principal summary{min-height:44px;display:flex;align-items:center}
+ .hero-grid{gap:28px;padding-top:42px;padding-bottom:85px}
+ .hero h1{font-size:clamp(36px,10vw,52px);line-height:1.1;overflow-wrap:anywhere}
+ .hero p{font-size:16px;line-height:1.65}
+ .hero-meta{flex-wrap:wrap;gap:10px 18px;margin-top:32px}
+ .hero-photo img{height:auto;max-height:320px;object-fit:contain}
+ .section{padding-top:60px;padding-bottom:55px}
+ .section-head h2{font-size:clamp(30px,8vw,42px);overflow-wrap:anywhere}
+ .activity-head{flex-wrap:wrap}
+ .guia-pasos{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .guia-paso{min-width:0;overflow-wrap:anywhere}
+ .register-card form{grid-template-columns:minmax(0,1fr)}
+ .register-card button,.register-card .status{grid-column:auto}
+ .case,.activity,.register-card,.report-card,.rubrica-completa,.evidence-grid article{min-width:0;overflow-wrap:anywhere}
+ .case-figure img,.diagnostico-imagen img{max-width:100%;height:auto;object-fit:contain}
+ .guia-acciones .btn,.report-actions .btn{max-width:100%;white-space:normal;text-align:center}
+ .rubrica-tabla-scroll{max-width:100%;overscroll-behavior-x:contain}
+}
+@media(max-width:375px){
+ .brand svg{width:34px;height:34px}
+ .brand small{display:none}
+ .brand b{font-size:13px}
+ .menu-principal summary{padding:8px}
+ .register-card,.activity,.report-card{padding:18px}
+ .steps{grid-template-columns:1fr;grid-auto-rows:minmax(220px,auto)}
+ .steps article:has(.ruta-etapa){min-height:220px}
+ .guide{grid-template-columns:1fr}
+ .apts-card{min-height:230px}
+}
+@media(max-width:700px) and (orientation:landscape){
+ .top{min-height:56px}
+ .hero-grid{padding-top:28px}
+}
+@media(max-width:520px){html.access-text-adjusted .guide{grid-template-columns:minmax(0,1fr)}}
